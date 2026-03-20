@@ -52,30 +52,28 @@ a = EdgeOptions()
 a.add_experimental_option("detach", True)
 driver = Edge(options=a)
 
-driver.get("https://www.saucedemo.com")
+
+
+driver.implicitly_wait(10)
+driver.get("https://www.saucedemo.com/")
 driver.maximize_window()
-wait = WebDriverWait(driver, 10)
-
-wait.until(EC.element_to_be_clickable((By.ID, "user-name"))).send_keys("standard_user")
-wait.until(EC.element_to_be_clickable((By.ID, "password"))).send_keys("secret_sauce")
-wait.until(EC.element_to_be_clickable((By.ID, "login-button"))).click()
-
-title = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "title")))
-print("Page Title:", title.text)
-
-names = driver.find_elements(By.CLASS_NAME, "inventory_item_name")
-print("\nProduct Names:")
-for n in names:
-    print(n.text)
-
-prices = driver.find_elements(By.CLASS_NAME, "inventory_item_price")
-print("\nProduct Prices:")
-for p in prices:
-    print(p.text)
-
-buttons = driver.find_elements(By.XPATH, "//button[text()='Add to cart']")
-buttons[3].click()
-
-print("\n4th product added to cart")
-driver.quit()
+wait=WebDriverWait(driver,10)
+username=wait.until(EC.visibility_of_element_located((By.ID,'user-name')))
+username.send_keys("standard_user")
+password=wait.until(EC.visibility_of_element_located((By.ID,'password')))
+password.send_keys("secret_sauce")
+btn=wait.until(EC.visibility_of_element_located((By.XPATH,"//input[@id='login-button']")))
+btn.click()
+time.sleep(5)
+title=wait.until(EC.visibility_of_element_located((By.XPATH,"//span[@class='title']")))
+print("The title is :",title.text)
+name=driver.find_elements(By.CLASS_NAME,"inventory_item_name ")
+for i in range(len(name)):
+    print(name[i].text)
+price=driver.find_elements(By.XPATH,"//div[@class='inventory_item_price']")
+for i in range(len(price)):
+    print(price[i].text)
+driver.find_element(By.ID,"add-to-cart-sauce-labs-fleece-jacket").click()
+time.sleep(5)
+driver.close()
 
